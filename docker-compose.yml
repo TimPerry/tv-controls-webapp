@@ -1,0 +1,12 @@
+version: "2"
+services:
+  app:
+    build: .
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - VIRTUAL_HOST=tv-controls-app.docker
+      - VIRTUAL_PORT=8080
+    command: yarn start
