@@ -16,7 +16,7 @@ COPY package.json yarn.lock /usr/src/app/
 RUN yarn install
 
 COPY elm-package.json /usr/src/app
-RUN ./node_modules/.bin/elm-package install -y
+RUN ./node_modules/.bin/elm-github-install
 
 COPY . /usr/src/app
 
