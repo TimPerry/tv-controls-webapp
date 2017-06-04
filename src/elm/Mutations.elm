@@ -8,19 +8,19 @@ import Types exposing (..)
 import Task exposing (Task)
 
 
--- Common
+-- Common (NOTE: Server is setup wrong, only has queries. Should be mutations.)
 
 
-sendMutationRequest : GraphQL.Request GraphQL.Mutation a -> Task GraphQLClient.Error a
+sendMutationRequest : GraphQL.Request GraphQL.Query a -> Task GraphQLClient.Error a
 sendMutationRequest request =
-    GraphQLClient.sendMutation "http://api.test.sl4u.co.uk/" request
+    GraphQLClient.sendQuery "http://tv-controls.server.home/" request
 
 
 
 -- AVR
 
 
-avrMutation : GraphQL.Document GraphQL.Mutation String { vars | state : Bool, volume : Int }
+avrMutation : GraphQL.Document GraphQL.Query String { vars | state : Bool, volume : Int }
 avrMutation =
     let
         stateVar =
@@ -29,7 +29,7 @@ avrMutation =
         volumeVar =
             Var.required "volume" .volume Var.int
     in
-        GraphQL.mutationDocument <|
+        GraphQL.queryDocument <|
             GraphQL.extract
                 (GraphQL.field "AVR"
                     [ ( "state", Arg.variable stateVar )
@@ -39,7 +39,7 @@ avrMutation =
                 )
 
 
-avrRequest : AVR -> GraphQL.Request GraphQL.Mutation String
+avrRequest : AVR -> GraphQL.Request GraphQL.Query String
 avrRequest avr =
     avrMutation
         |> GraphQL.request { state = avr.state, volume = avr.volume }
